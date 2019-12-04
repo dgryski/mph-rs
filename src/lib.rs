@@ -33,7 +33,7 @@ pub fn new(keys: &[&str]) -> Table {
         // idx+1 so we can identify empty entries in the table with 0
         h[i as usize].push(Entry {
             idx: (idx + 1) as i32,
-            hash: hash,
+            hash,
         });
     }
 
@@ -93,14 +93,14 @@ pub fn new(keys: &[&str]) -> Table {
             free.push(i);
         } else {
             // decrement idx as this is now the final value for the table
-            *v = *v - 1;
+            *v -= 1;
         }
     }
 
-    while hidx < h.len() && h[hidx].len() > 0 {
+    while hidx < h.len() && !h[hidx].is_empty() {
         let k = &h[hidx][0];
         let i = (k.hash as usize) % size;
-        hidx = hidx + 1;
+        hidx += 1;
 
         // take a free slot
         let dst = free.pop().unwrap();
@@ -112,10 +112,7 @@ pub fn new(keys: &[&str]) -> Table {
         seeds[i] = -(dst as i32 + 1);
     }
 
-    return Table {
-        values: values,
-        seeds: seeds,
-    };
+    Table { values, seeds }
 }
 
 impl Table {
@@ -130,7 +127,7 @@ impl Table {
         }
 
         let i = xorshift_mult64(seed as u64 + hash) & (size as u64 - 1);
-        return self.values[i as usize] as usize;
+        self.values[i as usize] as usize
     }
 }
 
@@ -139,7 +136,7 @@ fn xorshift_mult64(x: u64) -> u64 {
     x = x ^ (x >> 12); // a
     x ^= x << 25; // b
     x ^= x >> 27; // c
-    return x.wrapping_mul(2685821657736338717 as u64);
+    x.wrapping_mul(2_685_821_657_736_338_717 as u64)
 }
 
 #[cfg(test)]
