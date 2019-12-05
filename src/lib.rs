@@ -14,12 +14,6 @@ struct Entry {
     hash: u64,
 }
 
-fn calculate_hash<T: Hash>(t: &T) -> u64 {
-    let mut s = DefaultHasher::new();
-    t.hash(&mut s);
-    s.finish()
-}
-
 impl Table {
     pub fn new(keys: &[&str]) -> Table {
         let size = (keys.len()).next_power_of_two();
@@ -137,6 +131,12 @@ fn xorshift_mult64(x: u64) -> u64 {
     x ^= x << 25; // b
     x ^= x >> 27; // c
     x.wrapping_mul(2_685_821_657_736_338_717 as u64)
+}
+
+fn calculate_hash<T: Hash>(t: &T) -> u64 {
+    let mut s = DefaultHasher::new();
+    t.hash(&mut s);
+    s.finish()
 }
 
 #[cfg(test)]
