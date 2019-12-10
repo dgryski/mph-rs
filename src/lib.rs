@@ -54,7 +54,7 @@ impl Table {
                 seed += 1;
                 for k in subkeys.iter() {
                     let i = (xorshift_mult64(k.hash + seed) as usize) % size;
-                    if entries.get(&i) == None && values[i] == 0 {
+                    if entries.get(&i).is_none() && values[i] == 0 {
                         // looks free, claim it
                         entries.insert(i, k.idx);
                         continue;
