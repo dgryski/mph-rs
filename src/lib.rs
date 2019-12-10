@@ -147,7 +147,7 @@ mod tests {
     fn it_works() {
         let keys = vec!["foo", "bar", "baz", "qux", "zot", "frob", "zork", "zeek"];
 
-        let t = new(&keys);
+        let t = Table::new(&keys);
 
         for (i, k) in keys.iter().enumerate() {
             assert_eq!(t.query(k), i);
