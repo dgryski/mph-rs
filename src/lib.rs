@@ -75,10 +75,8 @@ impl Table {
             }
 
             // and assign this seed value for every subkey
-            for k in subkeys {
-                let i = (k.hash as usize) % size;
-                seeds[i] = seed as i32;
-            }
+            let i = (subkeys[0].hash as usize) % size;
+            seeds[i] = seed as i32;
         }
 
         // find the unassigned entries in the table
